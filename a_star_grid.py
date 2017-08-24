@@ -19,17 +19,17 @@
 #         [0, 1, 0, 0, 0, 0],
 #         [0, 0, 0, 0, 1, 0]]
 
-grid = [[0, 1, 0, 0, 0, 0],
-        [0, 1, 0, 1, 1, 0],
-        [0, 0, 0, 1, 0, 0],
-        [0, 1, 0, 1, 0, 1],
-        [0, 0, 0, 1, 0, 0]]
+grid = [[0, 1, 0, 0, 1, 0],
+        [0, 1, 0, 0, 1, 0],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 1, 0],
+        [0, 0, 0, 0, 1, 0]]
 
 heuristic = [[9, 8, 7, 6, 5, 4],
-            [8, 7, 6, 5, 4, 3],
-            [7, 6, 5, 4, 3, 2],
-            [6, 5, 4, 3, 2, 1],
-            [5, 4, 3, 2, 1, 0]]
+             [8, 7, 6, 5, 4, 3],
+             [7, 6, 5, 4, 3, 2],
+             [6, 5, 4, 3, 2, 1],
+             [5, 4, 3, 2, 1, 0] ]
 
 init = [0, 0]
 goal = [len(grid)-1, len(grid[0])-1]
@@ -62,13 +62,14 @@ def search():
 
     open = [[f, g, h, x, y]]
 
-    found = False  # flag that is set when search is complet
-    resign = False # flag set if we can't find expand
+    found  = False  # flag that is set when search is complet
+    resign = False  # flag set if we can't find expand
     count = 0
     
     while not found and not resign:
         if len(open) == 0:
             resign = True
+            print ("fail :-(")
         else:
             open.sort()
             open.reverse()
@@ -100,9 +101,9 @@ def search():
         print (expand[i])
 
     print
-
-    for i in range(len(action)):
-        print (action[i])
+    
+    for row in action:
+        print row
 
     print
 
@@ -130,7 +131,4 @@ def search():
 
     return expand #Leave this line for grading purposes!
 
-
 search()
-
-
