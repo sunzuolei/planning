@@ -2,10 +2,10 @@
 # Compute the value in dynamic programming
 # ----------
 
-grid = [[0, 1, 0, 0, 1, 0],
-        [0, 1, 0, 0, 1, 0],
+grid = [[0, 1, 0, 0, 0, 0],
         [0, 1, 0, 0, 0, 0],
-        [0, 1, 0, 0, 1, 0],
+        [0, 1, 0, 0, 0, 0],
+        [0, 1, 0, 0, 0, 0],
         [0, 0, 0, 0, 1, 0]]
 
 init = [0, 0]
@@ -18,42 +18,42 @@ delta = [[-1, 0 ], # go up
 
 delta_name = ['^', '<', 'v', '>']
 
-cost_step = 1
+cost_step = 1 # the cost associated with moving from a cell to an adjacent one.
 
-value = [[99 for row in range(len(grid[0]))] for col in range(len(grid)) ]
-value[goal[0]][goal[1]] = 0
-policy = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
-policy[goal[0]][goal[1]] = '*'
-for i in range(len(grid)):
-   for j in range(len(grid[0])):
-      if grid[i][j] == 1:
-            policy[i][j] = '1'
-change = True
-i = 0
-while change:
-   change = False
-   print (i)
-   i = i + 1
-   for x in range(len(grid)):
-      for y in range(len(grid[0])):
-         if grid[x][y] == 0:
-            for a in range(len(delta)):
-               x2 = x + delta[a][0]
-               y2 = y + delta[a][1]
+# ----------------------------------------
+# insert code below
+# ----------------------------------------
+def neighbors(i, j):
+    return [[i + di, j + dj] for di, dj in delta]
 
-               if x2 >= 0 and x2 < len(grid)  and \
-                  y2 >= 0 and y2 < len(grid[0]) and \
-                  grid[x2][y2] == 0:
-                  v2 = value[x][y] + cost_step
-                  if v2 < value[x2][y2]:
-                     change = True
-                     value[x2][y2] = v2
-                     policy[x2][y2] = delta_name[a]
-                 
-for i in range(len(value)):
-   print (value[i])
+def in_grid(i, j):
+    return i in range(len(grid)) and j in range(len(grid[0]))
 
-print
-#  The policy here is incorrect
-for i in range(len(policy)):
-   print (policy[i])
+def valid_cell(i, j, closed):
+    return in_grid(i, j) and not closed[i][j]
+
+def valid_neighbors(i, j, closed):
+    return [[p, q] for p, q in neighbors(i, j) if valid_cell(p, q, closed)]
+
+def recursive_value_grid(open, closed, value_grid):
+    open.sort()
+    if open:
+        value, [i, j] = open[0]
+        value_grid[i][j] = value
+        value_prime = value + cost_step
+        for p, q in valid_neighbors(i, j, closed):
+            closed[p][q] = True
+            open.append([value_prime, [p, q]])
+        return recursive_value_grid(open[1:], closed, value_grid)
+    else:
+        return value_grid
+
+if __name__ == "__main__":
+        closed = [[False if cell == 0 else True for cell in row] for row in grid]
+        closed[goal[0]][goal[1]] = True
+        value_grid = [[99 for cell in row] for row in grid]
+        value = 0
+        open = [[value, goal]]
+
+        for row in recursive_value_grid(open, closed, value_grid):
+                print row
