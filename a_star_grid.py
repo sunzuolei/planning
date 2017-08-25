@@ -108,11 +108,13 @@ def search():
     print
 
     # traceback the search path
-    policy = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
-    for i in range(len(grid)):
-        for j in range(len(grid[0])):
-            if grid[i][j] == 1:
-                policy[i][j] = '1'
+    # policy = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
+    # for i in range(len(grid)):
+    #     for j in range(len(grid[0])):
+    #         if grid[i][j] == 1:
+    #             policy[i][j] = '1'
+    
+    policy = [[' ' if cell == 0 else '1' for cell in row] for row in grid]
         
     x = goal[0]
     y = goal[1]
@@ -126,8 +128,11 @@ def search():
         x = x2
         y = y2
 
-    for i in range(len(policy)):
-        print (policy[i])
+    # for i in range(len(policy)):
+    #     print (policy[i])
+
+    for row in policy:
+        print row
 
     return expand #Leave this line for grading purposes!
 
